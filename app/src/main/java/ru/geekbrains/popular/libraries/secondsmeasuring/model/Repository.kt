@@ -2,10 +2,18 @@ package ru.geekbrains.popular.libraries.secondsmeasuring.model
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import ru.geekbrains.popular.libraries.secondsmeasuring.application.Constants
 
-internal class Repository(dataSource: DataSource = DataSource()) {
+class Repository {
+    /** Задание переменных */ //region
+    // DataSource
+    private val dataSource: DataSource = DataSource()
 
-    val dataData: Flow<Data> =
-        dataSource.data.map { data -> Data(data) }
-    //.onEach { saveInCache(it) }
+    //dataData
+    val dataData: Flow<Data> = dataSource.data.map { data -> Data(data) }
+    //endregion
+
+    fun setTimerAction(timerAction: Constants.Companion.TIMER_ACTIONS) {
+        dataSource.setTimerAction(timerAction)
+    }
 }

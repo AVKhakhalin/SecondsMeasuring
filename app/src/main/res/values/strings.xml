@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">SecondsMeasuring</string>
+
     <string name="text_time_text">00:00:000</string>
-    <string name="button_start_text">Start</string>
-    <string name="button_pause_text">Pause</string>
-    <string name="button_stop_text">Stop</string>
+    <string name="button_start_text">Старт</string>
+    <string name="button_pause_text">Пауза</string>
+    <string name="button_stop_text">Стоп</string>
 </resources>
