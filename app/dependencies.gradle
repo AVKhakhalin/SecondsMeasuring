@@ -30,6 +30,7 @@ def rxJavaAndroidVersion = "2.1.1"
 def rxJavaRxJavaVersion = "3.0.0-RC3"
 def ciceronyVersion = "6.6"
 def moxyVersion = "2.2.2"
+//def lifecycleVersion = "2.3.1"
 def lifecycleVersion = "2.2.0"
 ext {
     libs = [:]
@@ -45,6 +46,7 @@ ext {
     kotlin.jdk7 = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinJDK7Version"
     kotlin.coroutinescore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinescoreVersion"
     kotlin.coroutinesandroid = "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutineandroidVersion"
+
     //Design
     //You should not use the com.android.support and com.google.android.material dependencies in your app at the same time
     design = [:]
@@ -132,9 +134,11 @@ ext {
     lifecycle = [:]
     libs.lifecycle = lifecycle
     lifecycle.extensions = "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
-    // LiveData
+        // LiveData для использования extension asLiveData
     lifecycle.ktx = "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
-    // Lifecycles only (without ViewModel or LiveData)
+        // LiveData для viewModel, viewModelScope
+    lifecycle.viewmodel = "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+        // Lifecycles only (without ViewModel or LiveData)
     lifecycle.runtimektx = "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
     lifecycle.process = "androidx.lifecycle:lifecycle-process:$lifecycleVersion"
     lifecycle.java8 = "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"

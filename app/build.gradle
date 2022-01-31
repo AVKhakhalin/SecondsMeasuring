@@ -58,9 +58,11 @@ dependencies {
     implementation fileTree(dir: libs.tests.filetreedir, include: libs.tests.filetreeinclude) */
     // Lifecycle
     implementation libs.lifecycle.extensions
-    // LiveData
+        // LiveData
     implementation libs.lifecycle.ktx
-    // Lifecycles only (without ViewModel or LiveData)
+        // LiveData для viewModel, viewModelScope
+    implementation libs.lifecycle.viewmodel
+        // Lifecycles only (without ViewModel or LiveData)
     implementation libs.lifecycle.runtimektx
     implementation libs.lifecycle.process
     implementation libs.lifecycle.java8
