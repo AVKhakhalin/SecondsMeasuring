@@ -48,7 +48,7 @@ class MainViewModel(
     fun stopFirst() {
         firstTimerActions = Constants.Companion.TIMER_ACTIONS.STOP
         repository.setTimerFirstAction(firstTimerActions)
-       firstJob = null
+        firstJob = null
         firstScope.launch {
             delay(Constants.DELAY_UPDATE_TIME)
             firstScope.coroutineContext.cancelChildren()

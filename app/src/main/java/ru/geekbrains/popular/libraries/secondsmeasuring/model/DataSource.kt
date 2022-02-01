@@ -12,6 +12,7 @@ class DataSource {
     /** Задание переменных */ //region
     // DataBase
     private val dataBase: DataBase = DataBase
+
     // Data
     val dataFirst: Flow<String> = flow {
         while (true) {
@@ -40,6 +41,7 @@ class DataSource {
     fun setTimerFirstAction(timerAction: Constants.Companion.TIMER_ACTIONS) {
         dataBase.setTimerFirstAction(timerAction)
     }
+
     fun setTimerSecondAction(timerAction: Constants.Companion.TIMER_ACTIONS) {
         dataBase.setTimerSecondAction(timerAction)
     }

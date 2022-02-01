@@ -27,15 +27,15 @@ class MainActivity: AppCompatActivity() {
         val textViewSecond = binding.textTimeSecond
         // Настройка ViewModel
         viewModel.firstLiveData.observe(
-                this,
-                { dataFromDataBaseFirst ->
-                    textViewFirst.text = dataFromDataBaseFirst.data
-                })
+            this,
+            { dataFromDataBaseFirst ->
+                textViewFirst.text = dataFromDataBaseFirst.data
+            })
         viewModel.secondLiveData.observe(
-                this,
-                { dataFromDataBaseSecond ->
-                    textViewSecond.text = dataFromDataBaseSecond.data
-                })
+            this,
+            { dataFromDataBaseSecond ->
+                textViewSecond.text = dataFromDataBaseSecond.data
+            })
 
         //region Установка основных действий для работы с секундомером
         binding.buttonStart.setOnClickListener { viewModel?.let { it.startFirst() } }

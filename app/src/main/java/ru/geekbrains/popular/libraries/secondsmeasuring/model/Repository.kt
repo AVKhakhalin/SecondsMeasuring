@@ -18,6 +18,7 @@ class Repository {
     fun setTimerFirstAction(timerAction: Constants.Companion.TIMER_ACTIONS) {
         firstDataSource.setTimerFirstAction(timerAction)
     }
+
     fun setTimerSecondAction(timerAction: Constants.Companion.TIMER_ACTIONS) {
         secondDataSource.setTimerSecondAction(timerAction)
     }
