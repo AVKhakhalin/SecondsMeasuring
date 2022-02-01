@@ -12,7 +12,9 @@ class MainActivity: AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     // ViewModel
-    private var viewModel: MainViewModel? = null
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(this).get(MainViewModel::class.java)
+    }
     //endregion
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,23 +25,17 @@ class MainActivity: AppCompatActivity() {
         // Установка TextView
         val textViewFirst = binding.textTime
         val textViewSecond = binding.textTimeSecond
-        // Создание ViewModel
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // Настройка ViewModel
-        viewModel?.let {
-            it.firstLiveData.observe(
+        viewModel.firstLiveData.observe(
                 this,
                 { dataFromDataBaseFirst ->
                     textViewFirst.text = dataFromDataBaseFirst.data
                 })
-        }
-        viewModel?.let {
-            it.secondLiveData.observe(
+        viewModel.secondLiveData.observe(
                 this,
                 { dataFromDataBaseSecond ->
                     textViewSecond.text = dataFromDataBaseSecond.data
                 })
-        }
 
         //region Установка основных действий для работы с секундомером
         binding.buttonStart.setOnClickListener { viewModel?.let { it.startFirst() } }
