@@ -21,22 +21,36 @@ class MainActivity: AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         // Установка TextView
-        val textView = binding.textTime
+        val textViewFirst = binding.textTime
+        val textViewSecond = binding.textTimeSecond
         // Создание ViewModel
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // Настройка ViewModel
         viewModel?.let {
-            it.liveData.observe(
+            it.firstLiveData.observe(
                 this,
-                { dataFromDataBase ->
-                    textView.text = dataFromDataBase.data
+                { dataFromDataBaseFirst ->
+                    textViewFirst.text = dataFromDataBaseFirst.data
+                })
+        }
+        viewModel?.let {
+            it.secondLiveData.observe(
+                this,
+                { dataFromDataBaseSecond ->
+                    textViewSecond.text = dataFromDataBaseSecond.data
                 })
         }
 
         //region Установка основных действий для работы с секундомером
-        binding.buttonStart.setOnClickListener { viewModel?.let { it.start() } }
-        binding.buttonPause.setOnClickListener { viewModel?.let { it.pause() } }
-        binding.buttonStop.setOnClickListener { viewModel?.let { it.stop() } }
+        binding.buttonStart.setOnClickListener { viewModel?.let { it.startFirst() } }
+        binding.buttonPause.setOnClickListener { viewModel?.let { it.pauseFirst() } }
+        binding.buttonStop.setOnClickListener { viewModel?.let { it.stopFirst() } }
+        //endregion
+
+        //region Установка основных действий для работы с секундомером
+        binding.buttonStartSecond.setOnClickListener { viewModel?.let { it.startSecond() } }
+        binding.buttonPauseSecond.setOnClickListener { viewModel?.let { it.pauseSecond() } }
+        binding.buttonStopSecond.setOnClickListener { viewModel?.let { it.stopSecond() } }
         //endregion
     }
 }

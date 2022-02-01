@@ -13,7 +13,16 @@ object DataBase {
     }
 
     // stopwatchStateHolder
-    private val stopwatchStateHolder: StopwatchStateHolder =
+    private val firstStopwatchStateHolder: StopwatchStateHolder =
+        StopwatchStateHolder(
+            StopwatchStateCalculator(
+                timestampProvider,
+                ElapsedTimeCalculator(timestampProvider)
+            ),
+            ElapsedTimeCalculator(timestampProvider),
+            TimestampMillisecondsFormatter()
+        )
+    private val secondStopwatchStateHolder: StopwatchStateHolder =
         StopwatchStateHolder(
             StopwatchStateCalculator(
                 timestampProvider,
@@ -24,9 +33,13 @@ object DataBase {
         )
     //endregion
 
-    fun fetchData() = stopwatchStateHolder.getStringTimeRepresentation()
+    fun fetchFirstData() = firstStopwatchStateHolder.getStringTimeRepresentation()
+    fun setTimerFirstAction(timerAction: Constants.Companion.TIMER_ACTIONS) {
+        firstStopwatchStateHolder.setTimerAction(timerAction)
+    }
 
-    fun setTimerAction(timerAction: Constants.Companion.TIMER_ACTIONS) {
-        stopwatchStateHolder.setTimerAction(timerAction)
+    fun fetchSecondData() = secondStopwatchStateHolder.getStringTimeRepresentation()
+    fun setTimerSecondAction(timerAction: Constants.Companion.TIMER_ACTIONS) {
+        secondStopwatchStateHolder.setTimerAction(timerAction)
     }
 }

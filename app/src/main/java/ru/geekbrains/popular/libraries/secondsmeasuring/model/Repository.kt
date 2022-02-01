@@ -7,13 +7,18 @@ import ru.geekbrains.popular.libraries.secondsmeasuring.application.Constants
 class Repository {
     /** Задание переменных */ //region
     // DataSource
-    private val dataSource: DataSource = DataSource()
+    private val firstDataSource: DataSource = DataSource()
+    private val secondDataSource: DataSource = DataSource()
 
     //dataData
-    val dataData: Flow<Data> = dataSource.data.map { data -> Data(data) }
+    val firstDataData: Flow<Data> = firstDataSource.dataFirst.map { data -> Data(data) }
+    val secondDataData: Flow<Data> = secondDataSource.dataSecond.map { data -> Data(data) }
     //endregion
 
-    fun setTimerAction(timerAction: Constants.Companion.TIMER_ACTIONS) {
-        dataSource.setTimerAction(timerAction)
+    fun setTimerFirstAction(timerAction: Constants.Companion.TIMER_ACTIONS) {
+        firstDataSource.setTimerFirstAction(timerAction)
+    }
+    fun setTimerSecondAction(timerAction: Constants.Companion.TIMER_ACTIONS) {
+        secondDataSource.setTimerSecondAction(timerAction)
     }
 }

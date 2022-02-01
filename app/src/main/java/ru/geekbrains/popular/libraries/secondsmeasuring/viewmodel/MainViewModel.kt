@@ -15,54 +15,99 @@ class MainViewModel(
 ): ViewModel() {
     /** Задание переменных */ //region
     // Job
-    private var job: Job? = null
+    private var firstJob: Job? = null
+    private var secondJob: Job? = null
 
     // LiveData
-    val liveData: MutableLiveData<Data> = MutableLiveData()
+    val firstLiveData: MutableLiveData<Data> = MutableLiveData()
+    val secondLiveData: MutableLiveData<Data> = MutableLiveData()
 
     // ViewModelScope
-    private val scope: CoroutineScope = viewModelScope
+    private val firstScope: CoroutineScope = viewModelScope
+    private val secondScope: CoroutineScope = viewModelScope
 
     // TimerAction
-    private var timerActions: Constants.Companion.TIMER_ACTIONS =
+    private var firstTimerActions: Constants.Companion.TIMER_ACTIONS =
+        Constants.Companion.TIMER_ACTIONS.STOP
+    private var secondTimerActions: Constants.Companion.TIMER_ACTIONS =
         Constants.Companion.TIMER_ACTIONS.STOP
     //endregion
 
-    /** Методы управления таймером */ //region
-    fun start() {
-        timerActions = Constants.Companion.TIMER_ACTIONS.START
-        if (job == null) startJob()
-        repository.setTimerAction(Constants.Companion.TIMER_ACTIONS.START)
+    /** Методы управления первым таймером */ //region
+    fun startFirst() {
+        firstTimerActions = Constants.Companion.TIMER_ACTIONS.START
+        if (firstJob == null) startFirstJob()
+        repository.setTimerFirstAction(firstTimerActions)
     }
 
-    fun pause() {
-        timerActions = Constants.Companion.TIMER_ACTIONS.PAUSE
-        repository.setTimerAction(Constants.Companion.TIMER_ACTIONS.PAUSE)
+    fun pauseFirst() {
+        firstTimerActions = Constants.Companion.TIMER_ACTIONS.PAUSE
+        repository.setTimerFirstAction(firstTimerActions)
     }
 
-    fun stop() {
-        timerActions = Constants.Companion.TIMER_ACTIONS.STOP
-        repository.setTimerAction(Constants.Companion.TIMER_ACTIONS.STOP)
-        job = null
-        scope.launch {
+    fun stopFirst() {
+        firstTimerActions = Constants.Companion.TIMER_ACTIONS.STOP
+        repository.setTimerFirstAction(firstTimerActions)
+       firstJob = null
+        firstScope.launch {
             delay(Constants.DELAY_UPDATE_TIME)
-            scope.coroutineContext.cancelChildren()
+            firstScope.coroutineContext.cancelChildren()
+            startSecondJob()
         }
     }
     //endregion
 
+    /** Методы управления вторым таймером */ //region
+    fun startSecond() {
+        secondTimerActions = Constants.Companion.TIMER_ACTIONS.START
+        if (secondJob == null) startSecondJob()
+        repository.setTimerSecondAction(secondTimerActions)
+    }
 
-    private fun startJob() {
-        scope.launch {
+    fun pauseSecond() {
+        secondTimerActions = Constants.Companion.TIMER_ACTIONS.PAUSE
+        repository.setTimerSecondAction(secondTimerActions)
+    }
+
+    fun stopSecond() {
+        secondTimerActions = Constants.Companion.TIMER_ACTIONS.STOP
+        repository.setTimerSecondAction(secondTimerActions)
+        secondJob = null
+        secondScope.launch {
+            delay(Constants.DELAY_UPDATE_TIME)
+            secondScope.coroutineContext.cancelChildren()
+            startFirstJob()
+        }
+    }
+    //endregion
+
+    // Запуск первого таймера
+    private fun startFirstJob() {
+        firstScope.launch {
             while (isActive) {
-                repository.dataData.flowOn(Dispatchers.Main)
-//                .onEach { delay(1000) } // Задержка в самом потоке
+                repository.firstDataData.flowOn(Dispatchers.Main)
                     // Для использования .collect нужно: import kotlinx.coroutines.flow.collect
                     .collect { data ->
-                        if (timerActions != Constants.Companion.TIMER_ACTIONS.STOP)
-                            liveData.value = data
+                        if (firstTimerActions != Constants.Companion.TIMER_ACTIONS.STOP)
+                            firstLiveData.value = data
                         else
-                            liveData.value = Constants.DEFAULT_TIME
+                            firstLiveData.value = Constants.DEFAULT_TIME
+                    }
+            }
+        }
+    }
+
+    // Запуск второго таймера
+    private fun startSecondJob() {
+        secondScope.launch {
+            while (isActive) {
+                repository.secondDataData.flowOn(Dispatchers.Main)
+                    // Для использования .collect нужно: import kotlinx.coroutines.flow.collect
+                    .collect { data ->
+                        if (secondTimerActions != Constants.Companion.TIMER_ACTIONS.STOP)
+                            secondLiveData.value = data
+                        else
+                            secondLiveData.value = Constants.DEFAULT_TIME
                     }
             }
         }

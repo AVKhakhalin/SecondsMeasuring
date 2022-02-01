@@ -8,15 +8,26 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import ru.geekbrains.popular.libraries.secondsmeasuring.application.Constants
 
-class DataSource(
-    private val dataBase: DataBase = DataBase
-) {
+class DataSource {
     /** Задание переменных */ //region
+    // DataBase
+    private val dataBase: DataBase = DataBase
     // Data
-    val data: Flow<String> = flow {
+    val dataFirst: Flow<String> = flow {
         while (true) {
-            val dataFromDataBase = dataBase.fetchData()
-            emit(dataFromDataBase.toString())
+            val dataFromDataBaseFirst = dataBase.fetchFirstData()
+            emit(dataFromDataBaseFirst.toString())
+            delay(Constants.DELAY_UPDATE_TIME)
+        }
+    }
+        .flowOn(Dispatchers.Default)
+        .catch { e ->
+            println(e.message) //Error!
+        }
+    val dataSecond: Flow<String> = flow {
+        while (true) {
+            val dataFromDataBaseSecond = dataBase.fetchSecondData()
+            emit(dataFromDataBaseSecond.toString())
             delay(Constants.DELAY_UPDATE_TIME)
         }
     }
@@ -26,7 +37,10 @@ class DataSource(
         }
     //endregion
 
-    fun setTimerAction(timerAction: Constants.Companion.TIMER_ACTIONS) {
-        dataBase.setTimerAction(timerAction)
+    fun setTimerFirstAction(timerAction: Constants.Companion.TIMER_ACTIONS) {
+        dataBase.setTimerFirstAction(timerAction)
+    }
+    fun setTimerSecondAction(timerAction: Constants.Companion.TIMER_ACTIONS) {
+        dataBase.setTimerSecondAction(timerAction)
     }
 }
