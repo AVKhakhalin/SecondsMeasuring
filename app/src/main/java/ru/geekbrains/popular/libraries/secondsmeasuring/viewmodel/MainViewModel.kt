@@ -49,11 +49,6 @@ class MainViewModel(
         firstTimerActions = Constants.Companion.TIMER_ACTIONS.STOP
         repository.setTimerFirstAction(firstTimerActions)
         firstJob = null
-        firstScope.launch {
-            delay(Constants.DELAY_UPDATE_TIME)
-            firstScope.coroutineContext.cancelChildren()
-            startSecondJob()
-        }
     }
     //endregion
 
@@ -73,17 +68,12 @@ class MainViewModel(
         secondTimerActions = Constants.Companion.TIMER_ACTIONS.STOP
         repository.setTimerSecondAction(secondTimerActions)
         secondJob = null
-        secondScope.launch {
-            delay(Constants.DELAY_UPDATE_TIME)
-            secondScope.coroutineContext.cancelChildren()
-            startFirstJob()
-        }
     }
     //endregion
 
     // Запуск первого таймера
     private fun startFirstJob() {
-        firstScope.launch {
+        firstJob = firstScope.launch {
             while (isActive) {
                 repository.firstDataData.flowOn(Dispatchers.Main)
                     // Для использования .collect нужно: import kotlinx.coroutines.flow.collect
@@ -99,7 +89,7 @@ class MainViewModel(
 
     // Запуск второго таймера
     private fun startSecondJob() {
-        secondScope.launch {
+        secondJob = secondScope.launch {
             while (isActive) {
                 repository.secondDataData.flowOn(Dispatchers.Main)
                     // Для использования .collect нужно: import kotlinx.coroutines.flow.collect
